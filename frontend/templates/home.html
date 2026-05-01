@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Smart Agriculture System</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+  <link rel="stylesheet" href="/static/css/home.css"/>
+</head>
+<body>
+
+<!-- ── HEADER (reuse existing) ─────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🌾</span>
+      <div>
+        <h1>AI Smart Agriculture System</h1>
+        <p>Crop Recommendation &amp; Profit Optimisation</p>
+      </div>
+    </div>
+    <div class="model-badge">
+      <span>RandomForest</span>
+      <strong>{{ model_accuracy }}% Acc</strong>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── HERO ──────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="hero-tag">Machine Learning · FAOSTAT Data · 22 Crops</span>
+        <h2>Smarter Farming<br/>Starts with Data</h2>
+        <p>
+          Enter your soil and weather conditions — our AI model predicts the
+          best crop for your field and ranks the top options by estimated profit
+          per hectare using real yield and market-price data.
+        </p>
+        <a href="/predict" class="btn-hero">⚡ Get Crop Recommendation →</a>
+        <div class="hero-stats">
+          <div class="hstat"><strong>{{ model_accuracy }}%</strong><span>Model Accuracy</span></div>
+          <div class="hstat"><strong>2,200</strong><span>Training Samples</span></div>
+          <div class="hstat"><strong>22</strong><span>Crop Classes</span></div>
+          <div class="hstat"><strong>{{ cv_mean }}%</strong><span>CV Mean Acc</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="visual-card vc1">🌾 Rice<br/><small>Confidence 93%</small></div>
+        <div class="visual-card vc2">💹 Profit<br/><small>$125 / ha</small></div>
+        <div class="visual-card vc3">🌡️ 21 °C<br/><small>Ideal Temp</small></div>
+        <div class="visual-center">🤖<br/><small>AI Model</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
+  <section class="how-section">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-sub">Four steps from field data to profitable decision</p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-icon">🧪</div>
+        <div class="step-num">01</div>
+        <h3>Input Field Data</h3>
+        <p>Provide soil nutrients (N, P, K), pH, and weather parameters — temperature, humidity, and annual rainfall.</p>
+      </div>
+
+      <div class="step-arrow">→</div>
+
+      <div class="step">
+        <div class="step-icon">🤖</div>
+        <div class="step-num">02</div>
+        <h3>ML Prediction</h3>
+        <p>A Random Forest model (99.55% accuracy, trained on 2,200 samples) predicts the most suitable crop with a confidence score.</p>
+      </div>
+
+      <div class="step-arrow">→</div>
+
+      <div class="step">
+        <div class="step-icon">💹</div>
+        <div class="step-num">03</div>
+        <h3>Profit Ranking</h3>
+        <p>Each candidate crop is ranked using FAOSTAT yield data and current market prices: <em>Profit = Yield × Price</em>.</p>
+      </div>
+
+      <div class="step-arrow">→</div>
+
+      <div class="step">
+        <div class="step-icon">📋</div>
+        <div class="step-num">04</div>
+        <h3>Actionable Output</h3>
+        <p>You receive the best crop, top-3 profit-ranked alternatives, a confidence score, and a plain-English explanation.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FEATURES ──────────────────────────────────────────────────────── -->
+  <section class="features-section">
+    <h2 class="section-title">What You Get</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon">🏆</div>
+        <h3>Best Crop Prediction</h3>
+        <p>Top recommended crop based on your exact soil and weather profile, with a probability confidence score.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📊</div>
+        <h3>Top-3 Profit Ranking</h3>
+        <p>Three crop alternatives ranked by estimated profit per hectare, combining ML confidence with real yield data.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">💬</div>
+        <h3>AI Explanation</h3>
+        <p>A plain-English breakdown of why the crop was recommended — covering rainfall, temperature, pH, and nutrient fit.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🌍</div>
+        <h3>Real Yield Data</h3>
+        <p>Profit calculations use FAOSTAT global yield averages (2018–2024) and current market price estimates per tonne.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────────────── -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <h2>Ready to optimise your harvest?</h2>
+      <p>Takes less than 30 seconds. No account needed.</p>
+      <a href="/predict" class="btn-hero">⚡ Start Now →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Smart Agriculture AI · RandomForest · scikit-learn · Flask · FAOSTAT yield data</p>
+  <p>Model CV Accuracy: <strong>{{ cv_mean }}%</strong> &nbsp;|&nbsp; 2200 training samples &nbsp;|&nbsp; 22 crop classes</p>
+</footer>
+
+</body>
+</html>

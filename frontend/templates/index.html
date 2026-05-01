@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Agriculture — AI Crop Advisor</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🌾</span>
+      <div>
+        <h1>Smart Agriculture AI</h1>
+        <p>Crop Recommendation &amp; Profit Optimisation</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="/" class="home-nav-link">← Home</a>
+      <div class="model-badge">
+        <span>RandomForest</span>
+        <strong>{{ model_accuracy }}% Acc</strong>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ────────────────────────────────────────────────────────────── -->
+<main>
+  <div class="grid">
+
+    <!-- INPUT PANEL -->
+    <section class="card input-card">
+      <h2>🧪 Soil &amp; Weather Inputs</h2>
+      <p class="sub">Enter your field conditions to get AI-powered crop recommendations.</p>
+
+      <form id="predict-form" novalidate>
+        <div class="section-label">Soil Parameters</div>
+        <div class="field-group">
+          <div class="field">
+            <label>Nitrogen (N) <span>mg/kg</span></label>
+            <input type="number" id="N" placeholder="e.g. 90" min="0" max="140" required />
+          </div>
+          <div class="field">
+            <label>Phosphorus (P) <span>mg/kg</span></label>
+            <input type="number" id="P" placeholder="e.g. 42" min="0" max="145" required />
+          </div>
+          <div class="field">
+            <label>Potassium (K) <span>mg/kg</span></label>
+            <input type="number" id="K" placeholder="e.g. 43" min="0" max="205" required />
+          </div>
+          <div class="field">
+            <label>pH Level <span>0 – 14</span></label>
+            <input type="number" id="ph" placeholder="e.g. 6.5" step="0.01" min="3" max="10" required />
+          </div>
+        </div>
+
+        <div class="section-label">Weather Parameters</div>
+        <div class="field-group">
+          <div class="field">
+            <label>Temperature <span>°C</span></label>
+            <input type="number" id="temperature" placeholder="e.g. 25" step="0.1" min="0" max="50" required />
+          </div>
+          <div class="field">
+            <label>Humidity <span>%</span></label>
+            <input type="number" id="humidity" placeholder="e.g. 80" step="0.1" min="0" max="100" required />
+          </div>
+          <div class="field full-width">
+            <label>Rainfall <span>mm/year</span></label>
+            <input type="number" id="rainfall" placeholder="e.g. 202" step="0.1" min="20" max="3000" required />
+          </div>
+        </div>
+
+        <!-- Quick presets -->
+        <div class="section-label">Quick Presets</div>
+        <div class="presets">
+          <button type="button" class="preset-btn" data-preset="rice">🌾 Rice</button>
+          <button type="button" class="preset-btn" data-preset="coffee">☕ Coffee</button>
+          <button type="button" class="preset-btn" data-preset="maize">🌽 Maize</button>
+          <button type="button" class="preset-btn" data-preset="banana">🍌 Banana</button>
+        </div>
+
+        <button type="submit" class="btn-predict" id="submit-btn">
+          <span id="btn-text">⚡ Get Recommendation</span>
+          <span id="btn-spinner" class="hidden">⏳ Analysing…</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- OUTPUT PANEL -->
+    <section class="card output-card" id="output-panel">
+      <!-- Empty state -->
+      <div id="empty-state" class="empty-state">
+        <div class="empty-icon">🌱</div>
+        <h3>Awaiting Field Data</h3>
+        <p>Fill in the soil and weather parameters on the left, then click <strong>Get Recommendation</strong>.</p>
+      </div>
+
+      <!-- Results (hidden until prediction) -->
+      <div id="results" class="hidden">
+
+        <!-- Primary Prediction -->
+        <div class="primary-result">
+          <div class="primary-header">
+            <span class="badge-top">🏆 Best Match</span>
+            <h2 id="primary-crop-name">–</h2>
+            <div class="confidence-wrap">
+              <span>Confidence</span>
+              <div class="conf-bar-bg">
+                <div class="conf-bar" id="conf-bar"></div>
+              </div>
+              <strong id="primary-conf">–%</strong>
+            </div>
+          </div>
+          <div class="primary-stats" id="primary-stats">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- Top 3 Profit Table -->
+        <div class="top3-section">
+          <h3>📊 Top 3 Profit-Ranked Recommendations</h3>
+          <p class="sub">Ranked by Confidence × Profit potential</p>
+          <div class="top3-grid" id="top3-grid">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <!-- AI Explanation -->
+        <div class="explanation-section" id="explanation-section">
+          <h3>💬 Why This Crop?</h3>
+          <div class="explanation-body" id="explanation-body">
+            <p class="expl-summary" id="expl-summary"></p>
+            <ul class="expl-details" id="expl-details"></ul>
+            <div class="expl-tip" id="expl-tip"></div>
+          </div>
+        </div>
+
+        <!-- Profit comparison bar chart -->
+        <div class="chart-section">
+          <h3>💹 Profit Comparison (USD / ha)</h3>
+          <div class="bar-chart" id="bar-chart"></div>
+        </div>
+
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="error-state hidden">
+        <span>⚠️</span>
+        <p id="error-msg">Something went wrong.</p>
+      </div>
+    </section>
+
+  </div><!-- /grid -->
+</main>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
+<footer>
+  <p>Smart Agriculture AI · RandomForest · scikit-learn · Flask · FAOSTAT yield data</p>
+  <p>Model CV Accuracy: <strong>{{ cv_mean }}%</strong> &nbsp;|&nbsp; 2200 training samples &nbsp;|&nbsp; 22 crop classes</p>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
